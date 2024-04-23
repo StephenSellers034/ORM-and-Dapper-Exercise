@@ -15,9 +15,38 @@ namespace ORM_Dapper
                 .AddJsonFile("appsettings.json")
                 .Build();
             string connString = config.GetConnectionString("DefaultConnection");
-
+            string connsString = config.GetConnectionString("DefaultConnection");
             IDbConnection conn = new MySqlConnection(connString);
+            IDbConnection conns = new MySqlConnection(connString);
+
             var repo = new DapperDepartmentRepository(conn);
+            var repo1 = new DapperProductRepository(conns);
+
+            Console.WriteLine("Please Type the Name of your New product");
+            var newName = Console.ReadLine();
+
+            Console.WriteLine("Please type the price:");
+            double newPrice = double.Parse(Console.ReadLine());
+
+            Console.WriteLine("Please tell us the CategoryID");
+            var newCategoryID = int.Parse(Console.ReadLine());
+
+           
+
+           
+
+            repo1.CreateProduct(newName, newPrice, newCategoryID);
+
+            var products = repo1.GetAllProducts();
+
+            foreach(var item in products)
+            {
+                Console.WriteLine(item.Name);
+                Console.WriteLine(item.Price);
+                Console.WriteLine(item.CategoryID);
+                Console.WriteLine();
+                
+            }
 
             repo.InsertDepartment("Automotive");
 
@@ -34,6 +63,7 @@ namespace ORM_Dapper
                 Console.WriteLine();
                  
             }
+
 
         }
     }
